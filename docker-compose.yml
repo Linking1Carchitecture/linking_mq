@@ -1,0 +1,33 @@
+version: "3"
+services:
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: rabbitmq
+    container_name: linking_mq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - linking-net
+    volumes:
+      - ./rabbitmq/etc/:/etc/rabbitmq/
+      - ./rabbitmq/data/:/var/lib/rabbitmq/
+      - ./rabbitmq/logs/:/var/log/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_USER=rabbit
+      - RABBITMQ_PASSWORD=rabbit
+    external_links:
+      - settings_ms
+
+volumes:
+  rabbitmq:
+
+networks: 
+  linking-net:
+    external: false
+    name: linking-net
